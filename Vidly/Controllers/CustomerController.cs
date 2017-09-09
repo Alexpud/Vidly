@@ -10,13 +10,14 @@ namespace Vidly.Controllers
 {
     public class CustomerController : Controller
     {
-        List<Customer> movies { get; set; }
-
+        List<Customer> movies; 
+        private ApplicationDbContext _context;
 
         #region Constructor
 
         public CustomerController()
         {
+            _context = new ApplicationDbContext();
             movies = new List<Customer>()
             {
                 new Customer()
@@ -32,21 +33,29 @@ namespace Vidly.Controllers
             };
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
+
         #endregion
 
         // GET: Customer
         public ActionResult Index()
         {
             CustomerModel model = new CustomerModel();
-            model.Customers = this.movies;
+            var customers = _context.Customers;
+            model.Customers = customers.Include("MembershipType").ToList();
             return View(model);
         }
 
         public ActionResult Details(int customerId)
         {
-            var result = movies.FirstOrDefault(x => x.Id == customerId);
+            var customer = _context.Customers.FirstOrDefault(x => x.Id == customerId);
 
-            return View(result);
+            //var result = movies.FirstOrDefault(x => x.Id == customerId);
+
+            return View(customer);
         }
     }
 }
