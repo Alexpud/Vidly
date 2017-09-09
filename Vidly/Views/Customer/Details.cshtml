@@ -10,5 +10,13 @@
 else
 {
     <h2>@Model.Name</h2>
+    <ul>
+        <li>Membership Type:@Model.MembershipType.Name</li>
+
+        @if (Model.BirthDate != null)
+        {
+            <li>Birth date: @Model.BirthDate.Value.ToShortDateString()</li>
+        }
+    </ul>
 }
 

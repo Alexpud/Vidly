@@ -51,7 +51,7 @@ namespace Vidly.Controllers
 
         public ActionResult Details(int customerId)
         {
-            var customer = _context.Customers.FirstOrDefault(x => x.Id == customerId);
+            var customer = _context.Customers.Include("MembershipType").FirstOrDefault(x => x.Id == customerId);
 
             //var result = movies.FirstOrDefault(x => x.Id == customerId);
 
