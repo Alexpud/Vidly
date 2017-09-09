@@ -10,7 +10,6 @@ namespace Vidly.Controllers
 {
     public class CustomerController : Controller
     {
-        List<Customer> movies; 
         private ApplicationDbContext _context;
 
         #region Constructor
@@ -18,19 +17,6 @@ namespace Vidly.Controllers
         public CustomerController()
         {
             _context = new ApplicationDbContext();
-            movies = new List<Customer>()
-            {
-                new Customer()
-                {
-                    Name = "John Smith",
-                    Id =  1
-                },
-                new Customer()
-                {
-                    Name = "Mary Williams",
-                    Id = 2
-                }
-            };
         }
 
         protected override void Dispose(bool disposing)
@@ -52,8 +38,6 @@ namespace Vidly.Controllers
         public ActionResult Details(int customerId)
         {
             var customer = _context.Customers.Include("MembershipType").FirstOrDefault(x => x.Id == customerId);
-
-            //var result = movies.FirstOrDefault(x => x.Id == customerId);
 
             return View(customer);
         }
