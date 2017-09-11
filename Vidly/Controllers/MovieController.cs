@@ -37,11 +37,88 @@ namespace Vidly.Controllers
             return View(model);
         }
 
+        #region Details
+
         public ActionResult Details(int movieId)
         {
             var result = _context.Movies.FirstOrDefault(x => x.Id == movieId);
 
             return View(result);
         }
+
+        #endregion
+
+        #region New - GET
+
+        public ActionResult New()
+        {
+
+            List<string> genres = new List<string>()
+            {
+                "Action",
+                "Comedy",
+                "Romance",
+                "Mistery"
+            };
+
+            ViewBag.Genres = genres;
+            return View();
+        }
+
+        #endregion
+
+        #region New - POST
+
+        [HttpPost]
+        public ActionResult New(Movie movie)
+        {
+            movie.DateAdded = DateTime.Now;
+            _context.Movies.Add(movie);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        #endregion
+
+        #region Edit - GET
+
+        public ActionResult Edit(int movieId)
+        {
+            var movie = _context.Movies.FirstOrDefault(m => m.Id == movieId);
+            List<string> genres = new List<string>()
+            {
+                "Action",
+                "Comedy",
+                "Romance",
+                "Mistery"
+            };
+            ViewBag.Genres = genres;
+            return View(movie);
+        }
+
+        #endregion
+
+        #region Edit - POST
+
+        [HttpPost]
+        public ActionResult Edit(Movie movie)
+        {
+            var elem = _context.Movies.FirstOrDefault(m => m.Id == movie.Id);
+
+            if(elem != null)
+            {
+                elem.Name = movie.Name;
+                elem.ReleaseDate = movie.ReleaseDate;
+                elem.DateAdded = movie.DateAdded;
+                elem.Genre = movie.Genre;
+
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        #endregion
     }
 }
