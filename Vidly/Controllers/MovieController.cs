@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -72,11 +73,19 @@ namespace Vidly.Controllers
         [HttpPost]
         public ActionResult New(Movie movie)
         {
-            movie.DateAdded = DateTime.Now;
-            _context.Movies.Add(movie);
-            _context.SaveChanges();
+            try
+            {
+                movie.DateAdded = DateTime.Now;
+                _context.Movies.Add(movie);
+                _context.SaveChanges();
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }
+            catch(DbEntityValidationException e)
+            {
+                Console.WriteLine(e);
+                return View("Index");
+            }
         }
 
         #endregion
@@ -104,19 +113,27 @@ namespace Vidly.Controllers
         [HttpPost]
         public ActionResult Edit(Movie movie)
         {
-            var elem = _context.Movies.FirstOrDefault(m => m.Id == movie.Id);
-
-            if(elem != null)
+            try
             {
-                elem.Name = movie.Name;
-                elem.ReleaseDate = movie.ReleaseDate;
-                elem.DateAdded = movie.DateAdded;
-                elem.Genre = movie.Genre;
+                var elem = _context.Movies.FirstOrDefault(m => m.Id == movie.Id);
 
-                _context.SaveChanges();
+                if (elem != null)
+                {
+                    elem.Name = movie.Name;
+                    elem.ReleaseDate = movie.ReleaseDate;
+                    elem.DateAdded = movie.DateAdded;
+                    elem.Genre = movie.Genre;
+
+                    _context.SaveChanges();
+                }
+
+                return RedirectToAction("Index");
             }
-
-            return RedirectToAction("Index");
+            catch(DbEntityValidationException e)
+            {
+                Console.WriteLine(e);
+                return View("Index");
+            }
         }
 
         #endregion
