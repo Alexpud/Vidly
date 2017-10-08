@@ -9,6 +9,7 @@ namespace Vidly.ViewModels
     public class CustomerModel
     {
         public List<Customer> Customers { get; set; }
+        public Customer Customer { get; set; }
         public int CustomerrId { get; set; }
     }
 }

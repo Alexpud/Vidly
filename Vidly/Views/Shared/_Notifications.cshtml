@@ -1,0 +1,17 @@
+﻿@{ 
+    var successMessage = "";
+    var errorMessage = "a";
+    if (TempData["SuccessMessage"] != null)
+    {
+        successMessage = TempData["SuccessMessage"] as string;
+    }
+
+    if (TempData["ErrorMessage"] != null)
+    {
+        errorMessage = TempData["ErrorMessage"] as string;
+    }
+}
+
+<script>
+    console.log("@errorMessage");
+</script>

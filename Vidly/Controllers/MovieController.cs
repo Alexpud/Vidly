@@ -115,6 +115,11 @@ namespace Vidly.Controllers
         {
             try
             {
+
+                if(!ModelState.IsValid)
+                {
+                    return View("Edit", movie);
+                }
                 var elem = _context.Movies.FirstOrDefault(m => m.Id == movie.Id);
 
                 if (elem != null)
